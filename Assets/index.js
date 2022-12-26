@@ -1,22 +1,10 @@
-// Current Weather data
-// https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-
-// Geocoding API Call
-// http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-
-// 5 day weather forcast
-// api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-
+// Variable define the weather key is stored in local storage as weatherAPI
 const API = localStorage.getItem('weatherAPI');
-
-var coordinates = {  
-  lat: 'temp',
-  lon: 'temp'};             
-
+const coordinates = {};
 const currentWeather = {};
-var fiveDayWeather = [];
-function geoCodeFetch (city, state){
+const fiveDayWeather = [];
 
+function geoCodeFetch (city, state){
    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
   .then((response) => response.json())
   .then((data) => {
@@ -45,7 +33,6 @@ function fiveDayFetch (lat, lon){
   fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API}`)
  .then((response) => response.json())
  .then((data) => {
-  console.log(data);
   for (i=0; i < data.list.length; i++){
     fiveDayWeather[i] = data.list[i];
   }});
