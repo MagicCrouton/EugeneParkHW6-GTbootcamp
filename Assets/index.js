@@ -8,12 +8,19 @@
 // api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 
 const API = localStorage.getItem('weatherAPI');
+var feed = {  
+                lat: 'temp',
+                lon: 'temp'};
+
 
 function geoCodeFetch (city, state){
    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
   .then((response) => response.json())
   .then((data) => {
-    return data;
+    feed.lat = data[0].lat;
+    feed.lon = data[0].lon;
+    console.log(data);
+    // console.log(`lat: ${lat} lon: ${lon}`)
   })
 }
 
