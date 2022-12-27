@@ -52,11 +52,15 @@ function fiveDayFetch (lat, lon){
  }
 
  function loadCurrentWeather (currentWeather) {
+  $('#startWeather').remove();
   currentWeatherDisplayEl.append(`
   <div class="card col-3 bannerDisplay">
-    <div class="card-header">Weather</div>
-    <img id = "weatherIcon" src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png" class="card-img-top" alt="...">
+    <div class="card-header">Current Weather in ${currentWeather.name}</div>
+    <img id = "weatherIcon" src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png" class="card-img-top" alt="CurrentWeather">
     <div class="card-body">${currentWeather.weather[0].description}</div>
+  </div>
+  <div class="card col-3 bannerDisplay">
+    <div class="card-header">Humidity and Pressure</div>
     <div class="card-body">Humidity ${currentWeather.main.humidity}</div>
     <div class="card-body">Pressure ${currentWeather.main.pressure}</div>
   </div>
