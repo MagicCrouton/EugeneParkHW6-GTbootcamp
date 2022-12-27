@@ -2,8 +2,7 @@
     margin-top: 90px;
 }
 
-.tableHeader {
-    /* display: flex; */
-    /* flex-direction: row;
-    justify-content: space-between; */
+#dataEntry {
+    overflow: auto;
+    max-height: 30vh;
 }
