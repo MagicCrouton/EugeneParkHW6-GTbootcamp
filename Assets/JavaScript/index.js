@@ -7,6 +7,7 @@ const userSubmitBtn = $('#submitBtn');
 const cityInputEl = $('#cityInput');
 const userInputEl = $('#userInput');
 var workingIndex = '';
+const currentWeatherDisplayEl = $('#currentWeatherDisplay');
 
 
 function geoCodeFetch (city, state){
@@ -25,6 +26,7 @@ function currentWeatherFetch (lat, lon){
  .then((response) => response.json())
  .then((data) => {
   currentWeather = data;
+  // these are just notes to myself to reference when pulling values from data
   // const currentWeather ={};
   // currentWeather.weatherDescrip = data.weather[0].description;
   // currentWeather.temperature = data.main.temp;
@@ -47,6 +49,33 @@ function fiveDayFetch (lat, lon){
     fiveDayWeather[i] = data.list[i];
   }
 });
+ }
+
+ function loadCurrentWeather (currentWeather) {
+  currentWeatherDisplayEl.append(`
+  <div class="card col-3 bannerDisplay">
+    <div class="card-header">Weather</div>
+    <img id = "weatherIcon" src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png" class="card-img-top" alt="...">
+    <div class="card-body">${currentWeather.weather[0].description}</div>
+    <div class="card-body">Humidity ${currentWeather.main.humidity}</div>
+    <div class="card-body">Pressure ${currentWeather.main.pressure}</div>
+  </div>
+  <div class="card col-3 bannerDisplay">
+    <div class="card-header">Temperature</div>
+    <div class="card-body">Temperature ${currentWeather.main.temp}</div>
+    <div class="card-body">Max Temperature ${currentWeather.main.temp_max}</div>
+    <div class="card-body">Minimum Temperature ${currentWeather.main.temp_min}</div>
+  </div>
+<div class="card col-3 bannerDisplay">
+  <div class="card-header">Wind</div>
+  <div class="card-body">Wind Speed ${currentWeather.wind.speed}</div>
+  <div class="card-body">Wind Direction ${currentWeather.wind.deg}</div>
+</div>
+`)
+ }
+
+ function loadFiveDayForcast () {
+
  }
 
 userSubmitBtn.on('click', function(event){
@@ -87,6 +116,7 @@ userSubmitBtn.on('click', function(event){
       await geoCodeFetch(city,state).then((data) => console.log(data));
       await currentWeatherFetch(coordinates.lat, coordinates.lon).then((data) => console.log(data));
       await fiveDayFetch(coordinates.lat, coordinates.lon).then((data) => console.log(data));
+      await loadCurrentWeather(currentWeather);
     }
     api();
   })
