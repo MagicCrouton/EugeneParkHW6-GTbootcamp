@@ -2,7 +2,7 @@
 const API = localStorage.getItem('weatherAPI');
 const fiveDayWeather = [];
 const coordinates = {};
-const currentWeather = {};
+var currentWeather = 'temp';
 const userSubmitBtn = $('#submitBtn');
 const cityInputEl = $('#cityInput');
 const userInputEl = $('#userInput');
@@ -24,15 +24,16 @@ function currentWeatherFetch (lat, lon){
   return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}`)
  .then((response) => response.json())
  .then((data) => {
+  currentWeather = data;
   // const currentWeather ={};
-  currentWeather.weatherDescrip = data.weather[0].description;
-  currentWeather.temperature = data.main.temp;
-  currentWeather.maxTemp = data.main.temp_max;
-  currentWeather.minTemp = data.main.temp_min;
-  currentWeather.humidity = data.main.humidity;
-  currentWeather.pressure = data.main.pressure;
-  currentWeather.speed = data.wind.speed;
-  currentWeather.windDeg = data.wind.deg;
+  // currentWeather.weatherDescrip = data.weather[0].description;
+  // currentWeather.temperature = data.main.temp;
+  // currentWeather.maxTemp = data.main.temp_max;
+  // currentWeather.minTemp = data.main.temp_min;
+  // currentWeather.humidity = data.main.humidity;
+  // currentWeather.pressure = data.main.pressure;
+  // currentWeather.speed = data.wind.speed;
+  // currentWeather.windDeg = data.wind.deg;
   return currentWeather
  }); 
 }
