@@ -78,9 +78,44 @@ function fiveDayFetch (lat, lon){
 `)
  }
 
- function loadFiveDayForcast () {
-
- }
+ function loadFiveDayForcast (fiveDayWeather) {
+  let dayCount = 1;
+  for (i=0; i<fiveDayWeather.length; i=i+8) {
+    $(`#day${dayCount}ForcastSummary`).append(`
+    <div class="card col-10 summaryDisplay">
+    <img id = "weatherIcon${i}" class = "summaryImage" src="https://openweathermap.org/img/wn/${fiveDayWeather[i].weather[0].icon}@2x.png" class="card-img-top" alt="WeatherForcast">
+    <div class="card-header">Weather Forcast for ${fiveDayWeather[i].dt_txt}</div>
+    <div class="card-body">${fiveDayWeather[i].weather[0].description}</div>
+    </div>`);
+    for (n=0; n<8; n++) {
+      $(`#day${dayCount}DetailedForecast`).append(`
+      <div class = "hourByHour">
+      <div class="card col-3 detailedDisplay">
+        <div class="card-header">Weather at ${fiveDayWeather[i+n].dt_txt}</div>
+        <img id = "weatherIcon" src="https://openweathermap.org/img/wn/${fiveDayWeather[i+n].weather[0].icon}@2x.png" class="card-img-top" alt="CurrentWeather">
+        <div class="card-body">${fiveDayWeather[i+n].weather[0].description}</div>
+      </div>
+      <div class="card col-3 detailedDisplay">
+        <div class="card-header">Humidity and Pressure</div>
+        <div class="card-body">Humidity ${fiveDayWeather[i+n].main.humidity}</div>
+        <div class="card-body">Pressure ${fiveDayWeather[i+n].main.pressure}</div>
+      </div>
+      <div class="card col-3 detailedDisplay">
+        <div class="card-header">Temperature</div>
+        <div class="card-body">Temperature ${fiveDayWeather[i+n].main.temp}</div>
+        <div class="card-body">Max Temperature ${fiveDayWeather[i+n].main.temp_max}</div>
+        <div class="card-body">Minimum Temperature ${fiveDayWeather[i+n].main.temp_min}</div>
+      </div>
+    <div class="card col-3 detailedDisplay">
+      <div class="card-header">Wind</div>
+      <div class="card-body">Wind Speed ${fiveDayWeather[i+n].wind.speed}</div>
+      <div class="card-body">Wind Direction ${fiveDayWeather[i+n].wind.deg}</div>
+    </div>
+    </div>
+    `)
+    }
+    dayCount = dayCount+1;
+ }}
 
 userSubmitBtn.on('click', function(event){
   // event.preventDefault();
@@ -91,6 +126,9 @@ userSubmitBtn.on('click', function(event){
               <th style="width :25%">State</th>
               </tr>
   `);
+
+// This compares what was typed in to pull up something that matches every time submit is clicked
+// this, originally i did a jquery autocomplete plug in but the data set was large and creating perfomance issues.
 
   let i = 0;
   cityData.forEach(element => {
@@ -121,6 +159,7 @@ userSubmitBtn.on('click', function(event){
       await currentWeatherFetch(coordinates.lat, coordinates.lon).then((data) => console.log(data));
       await fiveDayFetch(coordinates.lat, coordinates.lon).then((data) => console.log(data));
       await loadCurrentWeather(currentWeather);
+      await loadFiveDayForcast(fiveDayWeather);
     }
     api();
   })
