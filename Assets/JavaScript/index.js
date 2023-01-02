@@ -138,6 +138,7 @@ function fiveDayFetch (lat, lon){
 //  constructer creates new object based on current searched weather the index input is the cityData index in the larger
 // data file in AutoCompleteData
  function weatherDataStore(c, s, cw, fdw,index) {
+  c = c.replaceAll(' ', '');
   this.city=c;
   this.state=s;
   this.currentWeather=cw;
