@@ -1,0 +1,41 @@
+.main-display {
+    margin-top: 90px;
+}
+
+#dataEntry {
+    overflow: auto;
+    max-height: 30vh;
+}
+
+#currentWeatherDisplay {
+    display: flex;
+    height: fit-content;
+    flex-direction: row;
+    text-align: center;
+}
+
+.bannerDisplay {
+    height: min-content;
+}
+
+#weatherIcon{
+    display: flex;
+    text-align: center;
+    height: 50%;
+    width: 50%;
+}
+.summaryDisplay {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.summaryImage {
+    height: 10%;
+    width: 10%;
+}
+
+.hourByHour {
+    display: flex;
+    flex-direction: row;
+}
