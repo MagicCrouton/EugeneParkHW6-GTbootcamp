@@ -153,7 +153,7 @@ function fiveDayFetch (lat, lon){
 function historyFill (weatherHistory) {
  weatherHistory.forEach((element) => {
   $(`#searchHistory`).append(`
-    <td> <button id = "${element.identifierTag}" class = "searchHistory">${element.city},    ${element.state}</button></td>
+    <td> <button id = "${element.identifierTag}" class = "searchHistory btn btn-outline-secondary">${element.city},    ${element.state}</button></td>
   `)
   // the event listner pulls data based on the "identifierTag" from local memory and populatest the weather
   // screen
@@ -261,7 +261,7 @@ userSubmitBtn.on('click', function(event){
           // make function to place clickable history items
           $(`#searchHistory`).empty();
           // this puts the title back into the the search history section
-          $(`#searchHistory`).append(`<h3>Search History <button id="clearHistory">Clear History</button></h3>`);
+          $(`#searchHistory`).append(`<h3>Search History <button class = "btn btn-outline-primary" id="clearHistory">Clear History</button></h3>`);
           let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
           // this creates a history search button and adds event Listener
           historyFill(weatherHistory);

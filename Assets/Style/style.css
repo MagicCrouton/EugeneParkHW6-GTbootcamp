@@ -10,8 +10,13 @@
 #searchHistory {
     display: flex;
     flex-direction: column;
+    text-align: center;
     overflow: auto;
-    max-height: 20vh;
+    max-height: 40vh;
+}
+
+.searchHistory {
+    margin: 2%;
 }
 
 #currentWeatherDisplay {
