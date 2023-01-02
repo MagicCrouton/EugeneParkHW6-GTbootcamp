@@ -22,15 +22,39 @@
               <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
+              <button id="apiModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat">
+                Click to view/edit your API Key
+              </button>
             </li>
           </ul>
         </div>
       </nav>
-
+      <!-- API modal that i grabbed off of bootstrap -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <h3 id="apiDisplay" for="recipient-name" class="col-form-label">Your API Key:</h3>
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Enter New Key</label>
+                  <textarea class="form-control" id="apiKeyReplace"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id="submitAPI" type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
 <div class="container main-display">
 <div class="row">
   <div id="dataEntry" class="col-3" class = "filteredResults">
@@ -48,7 +72,7 @@
   </div>
   <div id="searchHistory" class="col-3 history">
     <table id="historyTable">
-      <h3>Search History</h3>
+      <h3>Search History <button id="clearHistory">Clear History</button></h3>
     </table>
 </div>
     <div id="forcastDisplay" class="col-9">
@@ -113,14 +137,12 @@
   </div>
     </div>
       <footer class="bg-light text-center text-lg-start fixed-bottom">
-
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
           © 2022 Copyright:
           <a class="text-dark" href="https://github.com/MagicCrouton">MagicCrouton</a>
         </div>
-
       </footer>
-<a class="cityClick" href=""></a>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>

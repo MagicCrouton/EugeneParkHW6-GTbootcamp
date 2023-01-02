@@ -8,7 +8,7 @@ const userInputEl = $('#userInput');
 var workingIndex = '';
 const currentWeatherDisplayEl = $('#currentWeatherDisplay');
 
-// this modal pops up if no API is detected in local memory
+// checks to see if user has an API key and asks user to grab one
 if (localStorage.getItem('weatherAPI') === null) {
   // for some reason i can only define a prompt response as a var and not a const
 const API = window.prompt(`Oops you need an API for this page to work
@@ -20,6 +20,7 @@ localStorage.setItem('weatherAPI', API);
 const API = localStorage.getItem('weatherAPI');
 
 
+// This function grabs the lat and lon to be used in currentWeatherFetch and fiveDayFetch
 function geoCodeFetch (city, state){
    return fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
   .then((response) => response.json())
@@ -32,7 +33,7 @@ function geoCodeFetch (city, state){
 }
 
 function currentWeatherFetch (lat, lon){
-  return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}`)
+  return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API}`)
  .then((response) => response.json())
  .then((data) => {
   currentWeather = data;
@@ -51,7 +52,7 @@ function currentWeatherFetch (lat, lon){
 }
 
 function fiveDayFetch (lat, lon){
-  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API}`)
+  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API}`)
  .then((response) => response.json())
  .then((data) => {
   // console.log(data)
@@ -61,6 +62,7 @@ function fiveDayFetch (lat, lon){
 });
  }
 
+//  this function loads the current weather into the current weather element in the DOM
  function loadCurrentWeather (currentWeather) {
   $('#startWeather').remove();
   currentWeatherDisplayEl.empty();
@@ -89,6 +91,7 @@ function fiveDayFetch (lat, lon){
 `)
  }
 
+ //  this function loads the forecast weather into the accordian on the front page.
  function loadFiveDayForcast (fiveDayWeather) {
   let dayCount = 1;
   for (i=0; i<fiveDayWeather.length; i=i+8) {
@@ -131,7 +134,7 @@ function fiveDayFetch (lat, lon){
     dayCount = dayCount+1;
  }}
 
-//  creates new object based on current searched weather the index input is the cityData index in the larger
+//  constructer creates new object based on current searched weather the index input is the cityData index in the larger
 // data file in AutoCompleteData
  function weatherDataStore(c, s, cw, fdw,index) {
   this.city=c;
@@ -141,25 +144,48 @@ function fiveDayFetch (lat, lon){
   this.identifierTag = `${c}${index}`
  }
 
- function setSearchHistoryItem() {
-  if (localStorage.getItem('weatherHistory') === null) {
-    let weatherHistory = [];
-    weatherHistory[0] = new weatherDataStore(city, state, currentWeather, fiveDayWeather, workingIndex);
-    localStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
-  }
-  else {
-    // this pulls the current weather history out of local storage and pushed the latest into the array
+//  this function populates search history and adds an event listener to each item to populate the fields
+function historyFill (weatherHistory) {
+ weatherHistory.forEach((element) => {
+  $(`#searchHistory`).append(`
+    <td> <button id = "${element.identifierTag}" class = "searchHistory">${element.city},    ${element.state}</button></td>
+  `)
+  // the event listner pulls data based on the "identifierTag" from local memory and populatest the weather
+  // screen
+  $(`#${element.identifierTag}`).on('click', (event) => {
+    event.preventDefault();
+    let tempId = event.target.id;
     let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
-    let currentWeatherData = new weatherDataStore(city, state, currentWeather, fiveDayWeather, workingIndex);
-    weatherHistory.push(currentWeatherData);
-    // updates the latest search history and pushes into memory
-    localStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
-       }
-    // make function to place history item here
-    // weatherHistory.forEach(() => {
-    // })
- }
+    let workingIndex = weatherHistory.findIndex((element) => element.identifierTag === tempId);
+    loadCurrentWeather(weatherHistory[workingIndex].currentWeather);
+    loadFiveDayForcast(weatherHistory[workingIndex].fiveDayWeather);
+  })
+})}
 
+//  if there is already local data it will go ahead and populate the search history 
+if (localStorage.getItem('weatherHistory') != null){
+  let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
+  historyFill(weatherHistory)
+}
+
+// event listener for clearing out localstorage history
+$('#clearHistory').on('click', function() {
+  localStorage.removeItem('weatherHistory');
+  location.reload();
+})
+
+$('#apiModal').on('click', function(event) {
+  $('#apiDisplay').text(`Your API Key: ${localStorage.getItem('weatherAPI')}`)
+})
+
+$('#submitAPI').on('click', function(event) {
+  const API = $('#apiKeyReplace').val();
+  localStorage.setItem('weatherAPI', API);
+  location.reload();
+})
+
+// Main body of code when clicked A sorted list of possible city searches comes up and adds an event listener to each 
+// list item.
 userSubmitBtn.on('click', function(event){
   // event.preventDefault();
   $('#cityTable').empty();
@@ -189,14 +215,17 @@ userSubmitBtn.on('click', function(event){
     }
     i = i + 1;
   });
+
+// event listener for each list item in the search bar
  let userClickEl = $('.userClick');
   userClickEl.on('click', function(event){
     event.preventDefault();
-    let temp = $(`#${event.target.id}`);
-    let workingIndex = cityData.findIndex((element) => element.City === temp.text());
-    console.log(workingIndex);
-    let city = cityData[workingIndex].City;
-    let state = cityData[workingIndex].State;
+    let temp = parseInt(`${event.target.id}`);
+    console.log(temp);
+    let city = cityData[temp].City;
+    let state = cityData[temp].State;
+
+    // every time a new city is searched for an async function api() is used
     async function api(){
       await geoCodeFetch(city,state).then((data) => console.log(data));
       await currentWeatherFetch(coordinates.lat, coordinates.lon).then((data) => console.log(data));
@@ -206,13 +235,13 @@ userSubmitBtn.on('click', function(event){
       function setSearchHistoryItem() {
         if (localStorage.getItem('weatherHistory') === null) {
           let weatherHistory = [];
-          weatherHistory[0] = new weatherDataStore(city, state, currentWeather, fiveDayWeather, workingIndex);
+          weatherHistory[0] = new weatherDataStore(city, state, currentWeather, fiveDayWeather, temp);
           localStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
         }
         else {
           // this pulls the current weather history out of local storage and pushed the latest into the array
           let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
-          let currentWeatherData = new weatherDataStore(city, state, currentWeather, fiveDayWeather, workingIndex);
+          let currentWeatherData = new weatherDataStore(city, state, currentWeather, fiveDayWeather, temp);
           weatherHistory.push(currentWeatherData);
           // updates the latest search history and pushes into memory
           localStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
@@ -221,30 +250,18 @@ userSubmitBtn.on('click', function(event){
           // make function to place clickable history items
           $(`#searchHistory`).empty();
           // this puts the title back into the the search history section
-          $(`#searchHistory`).append(`<h3>Search History</h3>`);
+          $(`#searchHistory`).append(`<h3>Search History <button id="clearHistory">Clear History</button></h3>`);
           let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
           // this creates a history search button and adds event Listener
-          weatherHistory.forEach((element) => {
-            $(`#searchHistory`).append(`
-              <td> <button id = "${element.identifierTag}" class = "searchHistory">${element.city},    ${element.state}</button></td>
-            `)
-            // the event listner pulls data based on the "identifierTag" from local memory and populatest the weather
-            // screen
-            $(`#${element.identifierTag}`).on('click', (event) => {
-              event.preventDefault();
-              let tempId = event.target.id;
-              let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
-              let workingIndex = weatherHistory.findIndex((element) => element.identifierTag === tempId);
-              loadCurrentWeather(weatherHistory[workingIndex].currentWeather);
-              loadFiveDayForcast(weatherHistory[workingIndex].fiveDayWeather);
-            })
-          })
+          historyFill(weatherHistory);
        }
       await setSearchHistoryItem();
     }
     api();
   })
   });
+
+
 
  
 
