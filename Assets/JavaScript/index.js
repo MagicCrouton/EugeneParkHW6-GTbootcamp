@@ -20,6 +20,7 @@ localStorage.setItem('weatherAPI', API);
 const API = localStorage.getItem('weatherAPI');
 
 
+// Function Section
 // This function grabs the lat and lon to be used in currentWeatherFetch and fiveDayFetch
 function geoCodeFetch (city, state){
    return fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
@@ -162,6 +163,10 @@ function historyFill (weatherHistory) {
   })
 })}
 
+// Function Section end
+
+
+// event listeners for static elements such as clear history and nav bar options
 //  if there is already local data it will go ahead and populate the search history 
 if (localStorage.getItem('weatherHistory') != null){
   let weatherHistory = JSON.parse(localStorage.getItem('weatherHistory'));
@@ -183,9 +188,11 @@ $('#submitAPI').on('click', function(event) {
   localStorage.setItem('weatherAPI', API);
   location.reload();
 })
+// event listeners
 
-// Main body of code when clicked A sorted list of possible city searches comes up and adds an event listener to each 
-// list item.
+
+
+// Main body of code when clicked A sorted list of possible city searches comes up and adds an event listener to each list item
 userSubmitBtn.on('click', function(event){
   // event.preventDefault();
   $('#cityTable').empty();
