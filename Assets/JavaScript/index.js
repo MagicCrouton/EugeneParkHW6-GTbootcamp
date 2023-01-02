@@ -103,9 +103,12 @@ function fiveDayFetch (lat, lon){
     <img id = "weatherIcon${i}" class = "summaryImage" src="https://openweathermap.org/img/wn/${fiveDayWeather[i].weather[0].icon}@2x.png" class="card-img-top" alt="WeatherForcast">
     <div class="card-header">Weather Forcast for ${fiveDayWeather[i].dt_txt}</div>
     <div class="card-body">${fiveDayWeather[i].weather[0].description}</div>
+    <div class="card-body">temperature ${fiveDayWeather[i].main.temp}f</div>
+    <div class="card-body">${fiveDayWeather[i].main.pressure}</div>
+    <div class="card-body">click to expand</div>
     </div>`);
-    for (n=0; n<8; n++) {
-      $(`#day${dayCount}DetailedForecast`).empty();
+    $(`#day${dayCount}DetailedForecast`).empty();
+    for (n=0; n<8; n=n+1) {
       $(`#day${dayCount}DetailedForecast`).append(`
       <div class = "hourByHour">
       <div class="card col-3 detailedDisplay">
