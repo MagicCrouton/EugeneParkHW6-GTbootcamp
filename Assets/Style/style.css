@@ -4,7 +4,14 @@
 
 #dataEntry {
     overflow: auto;
-    max-height: 30vh;
+    max-height: 20vh;
+}
+
+#searchHistory {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 20vh;
 }
 
 #currentWeatherDisplay {
