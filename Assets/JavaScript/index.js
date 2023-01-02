@@ -23,7 +23,7 @@ const API = localStorage.getItem('weatherAPI');
 // Function Section
 // This function grabs the lat and lon to be used in currentWeatherFetch and fiveDayFetch
 function geoCodeFetch (city, state){
-   return fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
+   return fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${state},USA&limit=5&appid=${API}`)
   .then((response) => response.json())
   .then((data) => {
     // const coordinates = [];
